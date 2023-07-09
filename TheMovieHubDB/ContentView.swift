@@ -20,6 +20,10 @@ struct ContentView: View {
                     LazyVGrid(columns: columns, spacing: 10, content: {
                         ForEach(viewStore.dataSource) { item in
                             MovieCardView(model: item)
+                                .onAppear{
+                                    viewStore.send(.isLastIndex(item))
+                            }
+                              
                         }
                     })
                     

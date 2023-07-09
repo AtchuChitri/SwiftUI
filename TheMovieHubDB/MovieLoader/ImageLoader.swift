@@ -23,9 +23,10 @@ class ImageLoader: ObservableObject {
            let urlRequest = URLRequest(url: urlStr)
          
          let (data, _) = try await URLSession.shared.data(for: urlRequest)
-         let image = UIImage(data: data)
-         self.image = image
-         imageCache.set(forKey: url, image: image!)
+         if  let image = UIImage(data: data) {
+             self.image = image
+             imageCache.set(forKey: url, image: image)
+         }
     }
         
        

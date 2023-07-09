@@ -13,21 +13,28 @@ struct MovieListFeature: ReducerProtocol {
     struct State: Equatable  {
         var dataSource = IdentifiedArrayOf<MovieModel>()
         var currentPage = 1
+        var isLoadMore = false
     }
     enum Action: Equatable {
         case fetchMovieList
         case movieResponse(Result<moviesModel, WebServiceError>)
         case movieList(TaskResult<moviesModel>)
+        case loadMore(index: Int)
+        case isLastIndex(_ model: MovieModel)
+    }
+    func allMovies(_ page: Int) async throws -> moviesModel {
+        let apiEndPoint = ApiEndpoint.movie(.nowPlaying)
+        return try await webRequest.processWebService(request: WebServiceRequest(apiEndpoint: apiEndPoint,page: page), as: moviesModel.self)
     }
     var webRequest: WebServiceContract = WebService()
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .fetchMovieList:
+            let page = state.currentPage
             return .task {
                 await .movieList(
                 TaskResult{
-                    let apiEndPoint = ApiEndpoint.movie(.nowPlaying)
-                    return try await webRequest.processWebService(request: WebServiceRequest(apiEndpoint: apiEndPoint), as: moviesModel.self)
+                    return try await allMovies(page)
                 }
                 )
             }
@@ -47,6 +54,21 @@ struct MovieListFeature: ReducerProtocol {
                 return EffectTask(value: .movieResponse(.failure(WebServiceError.invalidRequest)))
 
             }
+        case .loadMore(index: let page):
+            return .task {
+                await .movieList(
+                TaskResult{
+                    return try await allMovies(page)
+                }
+                )
+            }
+        case .isLastIndex(let model):
+            state.isLoadMore = model == state.dataSource.last
+            if state.isLoadMore {
+                state.currentPage  += 1
+                return EffectTask(value: .loadMore(index: state.currentPage))
+            }
+            return .none
         }
     }
 }
