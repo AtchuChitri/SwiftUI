@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct MovieCardView: View {
     
@@ -17,7 +18,7 @@ struct MovieCardView: View {
         ZStack(alignment: .center){
             VStack {
                
-                        MovieImage(urlString: imageUrl + (model.poster ?? ""))
+                MovieImage(store: Store(initialState: MovieImageFeature.State(), reducer: MovieImageFeature()), urlString: imageUrl + (model.poster ?? ""))
                 ZStack {
                     MovieRateView(progress: 0.40)
                     Text("\(0.50 * 100, specifier: "%.0f")")
