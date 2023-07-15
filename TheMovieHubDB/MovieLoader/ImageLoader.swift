@@ -15,12 +15,11 @@ struct MovieImageFeature: ReducerProtocol {
     struct State: Equatable {
         var image: UIImage = UIImage()
     }
-    
     enum Action: Equatable {
         case fetchImage(_ url: String)
         case saveImage(_ image: TaskResult<UIImage?>, key: String)
     }
-    func getImage(_ url: String) async throws -> UIImage? {
+    private func getImage(_ url: String) async throws -> UIImage? {
         guard let urlStr = URL(string: url) else { return nil }
        let urlRequest = URLRequest(url: urlStr)
      let (data, _) = try await URLSession.shared.data(for: urlRequest)
@@ -30,6 +29,7 @@ struct MovieImageFeature: ReducerProtocol {
         return nil
     }
     
+        
 
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {

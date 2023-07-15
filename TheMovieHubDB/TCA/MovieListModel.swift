@@ -22,23 +22,24 @@ struct MovieListFeature: ReducerProtocol {
         case loadMore(index: Int)
         case isLastIndex(_ model: MovieModel)
     }
-    func allMovies(_ page: Int) async throws -> moviesModel {
-        let apiEndPoint = ApiEndpoint.movie(.nowPlaying)
-        return try await webRequest.processWebService(request: WebServiceRequest(apiEndpoint: apiEndPoint,page: page), as: moviesModel.self)
-    }
-    var webRequest: WebServiceContract = WebService()
+    
+    var allMovies: @Sendable (Int) async throws -> moviesModel
+
+    static let live = Self(
+        allMovies: APIClient.live.fetchMovies
+    )
+    
+    
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .fetchMovieList:
             let page = state.currentPage
             return .task {
                 await .movieList(
-                TaskResult{
-                    return try await allMovies(page)
-                }
-                )
+                    TaskResult{
+                        try await allMovies(page)
+                    })
             }
-            
         case .movieResponse(.success(let model)):
             if let results = model.results {
                 state.dataSource += results
@@ -58,7 +59,7 @@ struct MovieListFeature: ReducerProtocol {
             return .task {
                 await .movieList(
                 TaskResult{
-                    return try await allMovies(page)
+                     try await allMovies(page)
                 }
                 )
             }

@@ -12,7 +12,7 @@ import ComposableArchitecture
 struct TheMovieHubDBApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(store: Store(initialState: MovieListFeature.State(), reducer: MovieListFeature()))
+            ContentView(store: Store(initialState: MovieListFeature.State(), reducer: MovieListFeature.live))
         }
     }
 }

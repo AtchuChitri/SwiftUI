@@ -20,8 +20,11 @@ struct MovieCardView: View {
                
                 MovieImage(store: Store(initialState: MovieImageFeature.State(), reducer: MovieImageFeature()), urlString: imageUrl + (model.poster ?? ""))
                 ZStack {
-                    MovieRateView(progress: 0.40)
-                    Text("\(0.50 * 100, specifier: "%.0f")")
+                    let vote = round(model.voteAverage ?? 0) / 10
+                    let voteCount = round(model.voteAverage ?? 0) * 10
+
+                    MovieRateView(progress: Double(vote))
+                    Text("\(voteCount, specifier: "%.0f")")
                                        .font(.caption2)
                                        .bold()
                                        .foregroundColor(.white)

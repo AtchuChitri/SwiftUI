@@ -31,6 +31,8 @@ struct ContentView: View {
                         viewStore.send(.fetchMovieList)
                     }
                 }
+                .navigationBarTitle("The Movie Hub")
+
             }
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -39,6 +41,8 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(store: Store(initialState: MovieListFeature.State(), reducer: MovieListFeature()))
+        ContentView(store: Store(initialState: MovieListFeature.State(), reducer: MovieListFeature(allMovies: { _ in
+            moviesModel.sample
+        })))
     }
 }
