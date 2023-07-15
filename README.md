@@ -1,5 +1,5 @@
 # SwiftUI
-Working All Architecture in SwiftUI 
+Architecture's in SwiftUI 
 
     ****TCA(The Composable Architecture)***
     
