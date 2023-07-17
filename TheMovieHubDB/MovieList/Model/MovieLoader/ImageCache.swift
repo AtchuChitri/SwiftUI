@@ -17,7 +17,7 @@ class ImageCache: ImageCacheContract {
         }
     
     func set(forKey: String, image: UIImage) {
-           cache.setObject(image, forKey: NSString(string: forKey))
+            cache.setObject(image, forKey: NSString(string: forKey))
        }
 }
 

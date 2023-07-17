@@ -6,31 +6,33 @@
 //
 
 import SwiftUI
-import ComposableArchitecture
+import Factory
 
 struct ContentView: View {
-    let store: Store<MovieListFeature.State, MovieListFeature.Action>
+  //  @Injected(\.movieListViewModel) @ObservableObject var viewModel
+    
+    @ObservedObject var viewModel = resolve(\.movieListViewModel)
+
+    
     // 1. Number of items will be display in row
     let columns = Array(repeating: GridItem(.flexible()), count: 3)
     
     var body: some View {
-        WithViewStore(self.store) { viewStore in
             NavigationView {
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 10, content: {
-                        ForEach(viewStore.dataSource) { item in
+                        ForEach(viewModel.dataSource) { item in
                             MovieCardView(model: item)
                                 .onAppear{
-                                    viewStore.send(.isLastIndex(item))
+                                    Task {
+                                    await viewModel.isLoadMore(item)
+                                    }
                             }
                               
                         }
                     })
-                    
                     .onAppear {
-                        viewStore.send(.fetchMovieList)
                     }
-                }
                 .navigationBarTitle("The Movie Hub")
 
             }
@@ -41,8 +43,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(store: Store(initialState: MovieListFeature.State(), reducer: MovieListFeature(allMovies: { _ in
-            moviesModel.sample
-        })))
+        ContentView()
     }
 }

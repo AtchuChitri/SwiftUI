@@ -6,27 +6,24 @@
 //
 
 import SwiftUI
-import ComposableArchitecture
+import Factory
 
 struct MovieImage: View {
-    let store: Store<MovieImageFeature.State, MovieImageFeature.Action>
-
     var urlString: String
+    @ObservedObject var viewModel = resolve(\.movieListViewModel)
 
 
     var body: some View {
-        WithViewStore(self.store) { viewStore in
-            Image(uiImage: viewStore.image)
+            Image(uiImage: viewModel.image)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .padding(.top,0)
                 .padding(.leading,0)
                 .cornerRadius(5)
                 .onAppear {
-                        viewStore.send(.fetchImage(urlString))
+                    viewModel.fetchImage(urlString)
                 }
         }
-       }
 }
 
 
