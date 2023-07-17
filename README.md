@@ -11,7 +11,7 @@ Reducer: A function that describes how to evolve the current state of the app to
 
 Store: The runtime that actually drives your feature. You send all user actions to the store so that the store can run the reducer and effects, and you can observe state changes in the store so that you can update UI.
 
-    ****Clean Swift Architecture***
+    **** Clean Swift Architecture ***
 
 Clean Architecture is quite liberal about the number of layers we should introduce because this depends on the application domain.
 
