@@ -11,5 +11,21 @@ Reducer: A function that describes how to evolve the current state of the app to
 
 Store: The runtime that actually drives your feature. You send all user actions to the store so that the store can run the reducer and effects, and you can observe state changes in the store so that you can update UI.
 
+    ****Clean Swift Architecture***
+
+Clean Architecture is quite liberal about the number of layers we should introduce because this depends on the application domain.
+
+But in the most common scenario for a mobile app we’ll need to have three layers:
+
+Presentation layer
+Business Logic layer
+Data Access layer
+
+<img width="500" alt="Screenshot 2023-07-17 at 8 37 59 AM" src="https://github.com/AtchuChitri/SwiftUI/assets/59951020/b40ead1e-de61-4656-b33d-dfbfb4147062">
+
+
+
+
+
 <img src="https://github.com/AtchuChitri/SwiftUI/assets/59951020/dbab19f2-6e02-4229-9c49-78b24a65a7bf" width=60% height=60%>
 
